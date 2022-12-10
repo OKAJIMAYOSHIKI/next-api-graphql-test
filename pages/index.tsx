@@ -8,16 +8,24 @@ type Data = {
 }
 
 const Home: NextPage<Data> = ({ users }) => {
+  useEffect(() => {
+    const postData = async () => {
+      await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: 'John' }),
+      });
+    };
+    postData();
+  }, []);
 
   return (
     <div>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+      <h1>ユーザ</h1>
     </div>
-  )
+  );
 }
 
 export default Home;

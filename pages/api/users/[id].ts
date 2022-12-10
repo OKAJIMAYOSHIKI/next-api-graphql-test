@@ -3,13 +3,21 @@ import { hasUncaughtExceptionCaptureCallback } from "process";
 import { User } from ".";
 
 type Data = {
-  id: User['id']
+  message: string
+  body?: {
+    id: User['id']
+  }
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-
-    if (typeof req.query.id !== 'string') {
-      res.status(400).json({ message: 'Bad Request' })
+    const id = req.query.id
+    if (typeof id !== 'string') {
+      return res.status(400).json({ message: 'Bad Request' })
     }
-    res.status(200).json({ id: req.query.id  })
+    res.status(200).json({
+      message: 'Success',
+      body: {
+        id: +id
+      }
+    })
 }
