@@ -18,15 +18,33 @@ export type User = {
   }
 }
 
-type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE'
-
 type Data = {
-  users: User[]
+  message: string
+  body?: {
+    users: User[]
+  }
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { method } = req
-  const response = await fetch('https://jsonplaceholder.typicode.com/users/')
-  const users: User[] = await response.json()
-  res.status(200).json({ users })
+  switch (method) {
+    case 'GET':
+      const response = await fetch('https://jsonplaceholder.typicode.com/users/')
+      const users: User[] = await response.json()
+      const data = {
+        message: 'Success',
+        body: { users }
+      }
+      res.status(200).json(data)
+      break
+    case 'POST':
+      res.json({ message: 'POSTリクエスト' });
+      break;
+    case 'PATCH':
+      res.json({ message: 'PATCHリクエスト' });
+    case 'DELETE':
+      res.json({ message: 'DELETEリクエスト' });
+    default:
+      res.json({ message: 'その他リクエスト' });
+  }
 }
