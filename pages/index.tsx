@@ -1,37 +1,25 @@
 import type { GetServerSideProps, NextPage } from "next";
+import { UserApi } from "./api/users";
 
-import {useState,useEffect} from 'react'
-import { User } from "./api/users";
-
-type Data = {
-  users: User[]
-}
-
-const Home: NextPage<Data> = ({ users }) => {
-  useEffect(() => {
-    const postData = async () => {
-      await fetch('/api/users', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: 'John' }),
-      });
-    };
-    postData();
-  }, []);
-
+const Home: NextPage<UserApi> = ({ message, body }) => {
+  console.log('message:', message)
   return (
     <div>
-      <h1>ユーザ</h1>
+      <ul>
+        {body?.users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
+
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await fetch('http://localhost:3000/api/users')
-  const data: Data = await response.json()
-  return { props: data}
+  const response = await fetch('http://localhost:3000/api/users');
+  const data: UserApi = await response.json();
+
+  return { props: data };
 }

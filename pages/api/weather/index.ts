@@ -10,7 +10,7 @@ export type Data = {
       id: number
       main: string
       description: string
-      icon:02n
+      icon: string
     }
   ]
   base: string
